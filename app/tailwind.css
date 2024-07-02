@@ -1,3 +1,51 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: Geist Black;
+    src: url(../assets/fonts/Geist/statics-ttf/Geist-Bold.ttf)
+      format("truetype");
+  }
+  @font-face {
+    font-family: Geist Bold;
+    src: url(../assets/fonts/Geist/statics-ttf/Geist-Bold.ttf)
+      format("truetype");
+  }
+  @font-face {
+    font-family: Geist Light;
+    src: url(../assets/fonts/Geist/statics-ttf/Geist-Light.ttf)
+      format("truetype");
+  }
+  @font-face {
+    font-family: Geist Medium;
+    src: url(../assets/fonts/Geist/statics-ttf/Geist-Medium.ttf)
+      format("truetype");
+  }
+  @font-face {
+    font-family: Geist Regular;
+    src: url(../assets/fonts/Geist/statics-ttf/Geist-Regular.ttf)
+      format("truetype");
+  }
+  @font-face {
+    font-family: Geist Semibold;
+    src: url(../assets/fonts/Geist/statics-ttf/Geist-Semibold.ttf)
+      format("truetype");
+  }
+  @font-face {
+    font-family: Geist Thin;
+    src: url(../assets/fonts/Geist/statics-ttf/Geist-Thin.ttf)
+      format("truetype");
+  }
+  @font-face {
+    font-family: Geist UltraBlack;
+    src: url(../assets/fonts/Geist/statics-ttf/Geist-UltraBlack.ttf)
+      format("truetype");
+  }
+  @font-face {
+    font-family: Geist UltraLight;
+    src: url(../assets/fonts/Geist/statics-ttf/Geist-UltraLight.ttf)
+      format("truetype");
+  }
+}

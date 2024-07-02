@@ -13,7 +13,6 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
-    "module": "ESNext",
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "target": "ES2022",
@@ -25,8 +24,11 @@
     "paths": {
       "~/*": ["./app/*"]
     },
-
-    // Vite takes care of building everything, not tsc.
+    "typeRoots": ["./node_modules/@types/", "./types", "./node_modules"],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "allowImportingTsExtensions": true,
+    // Remix takes care of building everything in `remix build`.
     "noEmit": true
   }
 }
