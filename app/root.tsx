@@ -81,7 +81,7 @@ export default function App() {
           {contacts.length > 0 ? (
             contacts.map((contact) => (
               <li
-                className="flex"
+                className="mb-1 flex"
                 key={contact.id}
               >
                 <Link
@@ -89,9 +89,11 @@ export default function App() {
                   to={`/contacts/${contact.id}`}
                   onClick={() => setShowContacts(false)}
                 >
-                  {!!(contact.first_name || contact.last_name)
-                    ? `${contact.first_name} ${contact.last_name}`
-                    : "No name"}
+                  {!!(contact.first_name || contact.last_name) ? (
+                    `${contact.first_name} ${contact.last_name}`
+                  ) : (
+                    <span className="italic text-slate-500">No name</span>
+                  )}
                 </Link>
               </li>
             ))
@@ -108,6 +110,7 @@ export default function App() {
 
 export function ErrorBoundary() {
   const error = useRouteError() as Error;
+  console.log(error);
   return (
     <Layout>
       <div className="mx-6 my-2">

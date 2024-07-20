@@ -4,9 +4,10 @@ import q from "~/services/db.server";
 import invariant from "tiny-invariant";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  const display = data?.contact.first_name
-    ? `${data?.contact.first_name} ${data?.contact.last_name}`
-    : data?.contact.id;
+  const display =
+    data?.contact.first_name || data?.contact.last_name
+      ? `${data?.contact.first_name} ${data?.contact.last_name}`
+      : data?.contact.id;
 
   return [
     { title: `Contact | ${display}` },
@@ -20,7 +21,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.contactId, "Missing 'contactId' param");
   const contact = await q(
-    "SELECT first_name, last_name, avatar_url, twitter_url, about_me_description, created_at FROM contacts WHERE id = $1",
+    "SELECT id, first_name, last_name, avatar_url, twitter_url, about_me_description, created_at FROM contacts WHERE id = $1",
     [params.contactId],
   );
   if (!contact.length) throw new Response("Contact not found", { status: 404 });

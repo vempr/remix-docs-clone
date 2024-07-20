@@ -31,7 +31,7 @@ export default function Index() {
         !
       </p>
       <Link
-        className="font-geist-semibold my-2 flex justify-center rounded-2xl border-4 bg-sky-400 py-6 text-2xl text-white transition-all hover:bg-sky-500 hover:shadow-2xl"
+        className="font-geist-semibold mt-5 flex justify-center rounded-2xl border-4 bg-sky-400 py-6 text-2xl text-white transition-all hover:bg-sky-500 hover:shadow-2xl"
         to="/log-in"
       >
         Log In

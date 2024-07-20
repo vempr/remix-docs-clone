@@ -28,9 +28,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const form = await request.formData();
-  console.log(form);
-  return await authenticator.authenticate("form", request, {
+  return await authenticator.authenticate("form-sign-up", request, {
     successRedirect: "/",
   });
 };

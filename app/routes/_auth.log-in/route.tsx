@@ -29,7 +29,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  return await authenticator.authenticate("form", request, {
+  return await authenticator.authenticate("form-log-in", request, {
     successRedirect: "/",
   });
 };
