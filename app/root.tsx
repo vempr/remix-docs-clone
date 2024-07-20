@@ -1,4 +1,3 @@
-import q from "./services/db.server.ts";
 import { json } from "@remix-run/node";
 import {
   Link,
@@ -11,6 +10,9 @@ import {
   useRouteError,
 } from "@remix-run/react";
 import { ReactNode, useState } from "react";
+
+import q from "./services/db.server.ts";
+
 import type { LinksFunction } from "@remix-run/node";
 import stylesheet from "./tailwind.css?url";
 import { ChevronDown } from "lucide-react";
@@ -83,7 +85,7 @@ export default function App() {
                 key={contact.id}
               >
                 <Link
-                  className="font-geist-regular hover:font-geist-medium flex w-full rounded-lg border border-transparent py-2 underline transition-all hover:border-sky-500 hover:bg-sky-400 hover:text-white lg:py-3"
+                  className="font-geist-regular hover:font-geist-medium flex w-full rounded-lg border-2 py-2 pl-4 transition-all hover:border-sky-500 hover:bg-sky-400 hover:text-white lg:py-3"
                   to={`/contacts/${contact.id}`}
                   onClick={() => setShowContacts(false)}
                 >

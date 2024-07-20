@@ -4,9 +4,8 @@ import {
   MetaFunction,
 } from "@remix-run/node";
 import { useRouteError } from "@remix-run/react";
-import { authenticator } from "~/services/auth.server.ts";
-
 import AuthForm from "~/components/AuthForm.tsx";
+import { authenticator } from "~/services/auth.server";
 
 interface AuthError extends Error {
   data: { message: string };
@@ -14,10 +13,10 @@ interface AuthError extends Error {
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Log In" },
+    { title: "Sign Up" },
     {
       name: "description",
-      content: "Log in to remix-contacts app.",
+      content: "Sign up for a remix-contacts account.",
     },
   ];
 };
@@ -29,13 +28,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const form = await request.formData();
+  console.log(form);
   return await authenticator.authenticate("form", request, {
     successRedirect: "/",
   });
 };
 
-export default function LogIn() {
-  return <AuthForm isLoginPage />;
+export default function SignUp() {
+  return <AuthForm isLoginPage={false} />;
 }
 
 export function ErrorBoundary() {

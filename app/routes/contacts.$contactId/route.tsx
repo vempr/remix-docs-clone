@@ -1,26 +1,21 @@
+import { json, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import q from "~/services/db.server";
 import invariant from "tiny-invariant";
-import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import linkToName from "./linkToName";
 
-// export const meta: MetaFunction<typeof loader> = ({ data }) => {
-//   const hasName = !!(
-//     data &&
-//     (data.contact.first.length || data.contact.last.length)
-//   );
-//   const hasId = !!(data && data.contact.id);
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  const display = data?.contact.first_name
+    ? `${data?.contact.first_name} ${data?.contact.last_name}`
+    : data?.contact.id;
 
-//   return [
-//     {
-//       title: `Contact | ${hasName ? `${data.contact.first} ${data.contact.last}` : "No Name"}`,
-//     },
-//     {
-//       name: "description",
-//       content: `Contact info of User ID ${hasId && data.contact.id}`,
-//     },
-//   ];
-// };
+  return [
+    { title: `Contact | ${display}` },
+    {
+      name: "description",
+      content: `Profile of user "${display}"`,
+    },
+  ];
+};
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.contactId, "Missing 'contactId' param");
@@ -37,9 +32,9 @@ export default function Contact() {
 
   return (
     <div className="flex gap-x-6">
-      {contact.avatar_url ? (
+      {contact.avatar_url?.length ? (
         <img
-          className="h-48 w-48 rounded-2xl"
+          className="h-48 w-48 rounded-2xl border-4 border-sky-500"
           src={contact.avatar_url}
         />
       ) : (
@@ -63,7 +58,7 @@ export default function Contact() {
             href={contact.twitter_url}
             target="_blank"
           >
-            @{linkToName(contact.twitter_url) || contact.twitter_url}
+            {contact.twitter_url}
           </a>
         ) : (
           <a className="font-geist-regular">No twitter</a>

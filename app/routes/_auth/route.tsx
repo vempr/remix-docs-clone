@@ -15,19 +15,19 @@ export default function AuthLayout() {
         {isLoginUrl && (
           <p>
             <span className="text-sky-500">{"<"}</span>Log In
-            <span className="text-sky-500">{"/>"}</span>
+            <span className="text-sky-500">{" />"}</span>
           </p>
         )}
         {isSignupUrl && (
           <p>
             <span className="text-sky-500">{"<"}</span>Sign Up
-            <span className="text-sky-500">{"/>"}</span>
+            <span className="text-sky-500">{" />"}</span>
           </p>
         )}
         {isForgotPasswordUrl && (
           <p>
             <span className="text-sky-500">{"<"}</span>Forgot Password
-            <span className="text-sky-500">{"/>"}</span>
+            <span className="text-sky-500">{" />"}</span>
           </p>
         )}
       </h1>
