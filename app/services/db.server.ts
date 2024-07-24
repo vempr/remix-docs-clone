@@ -26,7 +26,7 @@ const pool = new Pool({
 
 const q = (
   query: string,
-  params?: string[],
+  params?: (string | number)[],
 ): Promise<Contact[] | Partial<Contact>[] | []> =>
   pool.query(query, params).then((response) => response.rows);
 export default q;

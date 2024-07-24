@@ -3,10 +3,14 @@ import { Link, useLoaderData, useRouteError } from "@remix-run/react";
 import { singleQuery } from "~/services/db.server";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  const display =
-    data?.contact.first_name || data?.contact.last_name
-      ? `${data?.contact.first_name} ${data?.contact.last_name}`
-      : data?.contact.id;
+  let display: string = "Error";
+  if (data) {
+    if (data.contact.first_name || data.contact.last_name) {
+      display = `${data?.contact.first_name} ${data?.contact.last_name}`;
+    } else {
+      display = `${data?.contact.id}`;
+    }
+  }
 
   return [
     { title: `Contact | ${display}` },
