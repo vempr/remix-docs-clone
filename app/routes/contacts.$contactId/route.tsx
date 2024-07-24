@@ -1,7 +1,6 @@
 import { json, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import q from "~/services/db.server";
-import invariant from "tiny-invariant";
+import { Link, useLoaderData, useRouteError } from "@remix-run/react";
+import { singleQuery } from "~/services/db.server";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   const display =
@@ -19,13 +18,15 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
-  invariant(params.contactId, "Missing 'contactId' param");
-  const contact = await q(
+  if (isNaN(params.contactId as any))
+    throw new Error(`Invalid ID: "${params.contactId}"`);
+  const contact = await singleQuery(
     "SELECT id, first_name, last_name, avatar_url, twitter_url, about_me_description, created_at FROM contacts WHERE id = $1",
-    [params.contactId],
+    [params.contactId as string],
   );
-  if (!contact.length) throw new Response("Contact not found", { status: 404 });
-  return json({ contact: contact[0] });
+  if (contact === null)
+    throw new Error(`Contact with ID ${params.contactId} not found`);
+  return json({ contact });
 };
 
 export default function Contact() {
@@ -74,6 +75,24 @@ export default function Contact() {
           </p>
         )}
       </div>
+    </div>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError() as Error;
+
+  return (
+    <div>
+      <h1 className="font-geist-black text-7xl text-red-500">Error!..</h1>
+      <strong className="font-geist-light">{error.message}</strong>
+      <br />
+      <Link
+        to="/"
+        className="font-geist-light underline"
+      >
+        Return to the Home Page
+      </Link>
     </div>
   );
 }

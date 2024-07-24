@@ -12,9 +12,14 @@ import { LoginArgs, loginSchema } from "~/routes/_auth.log-in/login-schema";
 type AuthFormProps = {
   isLoginPage: boolean;
   children?: React.ReactNode;
+  success?: boolean;
 };
 
-export default function AuthForm({ isLoginPage, children }: AuthFormProps) {
+export default function AuthForm({
+  isLoginPage,
+  children,
+  success,
+}: AuthFormProps) {
   const [passwordShow, setPasswordShow] = useState(false);
   const {
     register,
@@ -81,7 +86,9 @@ export default function AuthForm({ isLoginPage, children }: AuthFormProps) {
         )}
       </div>
       {children && (
-        <strong className="font-geist-regular text-sm text-red-600">
+        <strong
+          className={`font-geist-regular text-sm ${success ? "text-green-600" : "text-red-600"}`}
+        >
           {children}
         </strong>
       )}

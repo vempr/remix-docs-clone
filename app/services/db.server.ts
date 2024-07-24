@@ -12,6 +12,7 @@ export type Contact = {
   avatar_url: string | undefined;
   twitter_url: string | undefined;
   about_me_description: string | undefined;
+  email_confirmed: boolean;
 };
 
 const { Pool } = pg;
