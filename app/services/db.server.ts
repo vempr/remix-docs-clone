@@ -9,8 +9,8 @@ export type Contact = {
   created_at: Date;
   first_name: string | undefined;
   last_name: string | undefined;
-  avatar_url: string | undefined;
-  twitter_url: string | undefined;
+  avatar_public_id: string | undefined;
+  twitter_handle: string | undefined;
   about_me_description: string | undefined;
   email_confirmed: boolean;
 };

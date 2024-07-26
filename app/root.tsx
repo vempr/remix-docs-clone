@@ -1,3 +1,6 @@
+import { ChevronDown } from "lucide-react";
+import { ReactNode, useState } from "react";
+
 import { json } from "@remix-run/node";
 import {
   Link,
@@ -9,21 +12,20 @@ import {
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
-import { ReactNode, useState } from "react";
 
+import { authenticator } from "./services/auth.server.ts";
 import q from "./services/db.server.ts";
-
-import type { LinksFunction } from "@remix-run/node";
 import stylesheet from "./tailwind.css?url";
-import { ChevronDown } from "lucide-react";
 
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
 ];
 
-export const loader = async () => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const contacts = await q("SELECT id, first_name, last_name FROM contacts");
-  return json({ contacts });
+  const user = await authenticator.isAuthenticated(request);
+  return json({ contacts, user });
 };
 
 function Layout({ children }: { children: ReactNode }) {
@@ -38,11 +40,11 @@ function Layout({ children }: { children: ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="flex flex-col lg:h-screen lg:flex-row">
-        <header className="mb-20 bg-slate-100 py-4 lg:m-0 lg:min-h-screen lg:w-[20vw]">
+      <body className="flex flex-col overflow-x-hidden lg:min-h-screen lg:flex-row">
+        <header className="border-opacity-10 bg-slate-100 py-4 lg:min-h-screen lg:w-[20vw] lg:border-r-4 lg:border-slate-200">
           {children}
         </header>
-        <main className="flex flex-grow items-center justify-center">
+        <main className="my-10 flex flex-grow items-center justify-center">
           <Outlet />
         </main>
         <ScrollRestoration />
@@ -53,17 +55,43 @@ function Layout({ children }: { children: ReactNode }) {
 }
 
 export default function App() {
-  const { contacts } = useLoaderData<typeof loader>();
+  const { contacts, user } = useLoaderData<typeof loader>();
   const [showContacts, setShowContacts] = useState(false);
 
   return (
     <Layout>
-      <Link
-        className="font-geist-light ml-6 text-sm hover:underline"
-        to="/"
-      >
-        Home
-      </Link>
+      <nav>
+        <ul className="font-geist-light text-md flex gap-x-1">
+          <li>
+            <Link
+              className="ml-6 hover:underline"
+              to="/"
+            >
+              Home
+            </Link>
+          </li>
+          {" | "}
+          {user ? (
+            <li>
+              <Link
+                className="hover:underline"
+                to="/user"
+              >
+                Your Profile
+              </Link>
+            </li>
+          ) : (
+            <li>
+              <Link
+                className="hover:underline"
+                to="/"
+              >
+                Log In
+              </Link>
+            </li>
+          )}
+        </ul>
+      </nav>
       <button
         className="mb-4 flex w-screen items-center justify-between px-6 lg:flex-shrink-0 lg:hover:cursor-default"
         onClick={() => {
@@ -71,7 +99,7 @@ export default function App() {
             setShowContacts(!showContacts);
         }}
       >
-        <p className="font-geist-black text-2xl">Contacts</p>
+        <p className="font-geist-black text-3xl">Contacts</p>
         <ChevronDown className="lg:hidden" />
       </button>
       <nav>

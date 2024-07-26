@@ -22,7 +22,7 @@ authenticator.use(
       `SELECT * FROM contacts WHERE email = '${email}'`,
     )) as Contact | null;
     if (existingUser === null) {
-      throw new AuthorizationError("Email doesn't exist");
+      throw new AuthorizationError("Email doesn't exist.");
     }
 
     const emailConfirmed = existingUser.email_confirmed;
@@ -34,7 +34,7 @@ authenticator.use(
     const existingPassword = existingUser.password as string;
     const passwordMatches: boolean = compareSync(password, existingPassword);
     if (!passwordMatches) {
-      throw new AuthorizationError("Email or password is invalid");
+      throw new AuthorizationError("Email or password is invalid.");
     }
 
     return existingUser;
