@@ -17,6 +17,7 @@ import { useFetcher, useLoaderData } from "@remix-run/react";
 import { profileSchema, ProfileValidation } from "./profileSchema.ts";
 import uploadHandler from "./uploadHandler.server.ts";
 import { singleQuery } from "~/services/db.server.ts";
+import { deleteImage } from "~/services/cloudinary.server.ts";
 
 export const meta: MetaFunction = () => {
   return [
@@ -63,6 +64,9 @@ export async function action({ request }: ActionFunctionArgs) {
     const avatarPublicId = uploadFormData.get("profilePicture") as
       | string
       | null;
+    const oldAvatarPublicId = uploadFormData.get("oldProfilePicture") as
+      | string
+      | null;
 
     profileSchema.parse({
       firstName,
@@ -81,6 +85,7 @@ export async function action({ request }: ActionFunctionArgs) {
         // prettier-ignore
         [firstName, lastName, twitterHandle, aboutMeDescription, avatarPublicId, user.id],
       );
+      if (oldAvatarPublicId) await deleteImage(oldAvatarPublicId);
     } else {
       await singleQuery(
         `
@@ -94,6 +99,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     return json({ message: "Profile successfully updated!", ok: true });
   } catch (err) {
+    console.log(err);
     if (err instanceof Error) {
       return json({ message: err.message, ok: false });
     } else {
@@ -128,6 +134,9 @@ export default function EditProfile() {
     });
     if (profilePicture) {
       formData.append("profilePicture", profilePicture);
+    }
+    if (user?.avatar_public_id) {
+      formData.append("oldProfilePicture", user.avatar_public_id);
     }
 
     fetcher.submit(formData, {

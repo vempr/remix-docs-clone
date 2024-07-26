@@ -16,7 +16,6 @@ export default async function uploadImageToCloudinary(data: Buffer) {
           folder: "remix",
         },
         (error, result) => {
-          console.log(error, result);
           if (error) {
             reject(error);
             return;
@@ -30,4 +29,8 @@ export default async function uploadImageToCloudinary(data: Buffer) {
   );
 
   return uploadPromise;
+}
+
+export async function deleteImage(publicId: string) {
+  return cloudinary.uploader.destroy(publicId);
 }
