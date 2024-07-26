@@ -51,6 +51,9 @@ export async function action({ request }: ActionFunctionArgs) {
       uploadHandler,
     );
 
+    // Manual parsing instead of getValidatedFormData from remix-hook-form
+    // Because Zod can't parse image
+
     const firstName = uploadFormData.get("firstName") as string;
     const lastName = uploadFormData.get("lastName") as string;
     const twitterHandle = uploadFormData.get("twitterHandle") as string;
