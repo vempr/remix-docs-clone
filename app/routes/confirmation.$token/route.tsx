@@ -24,6 +24,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     return null;
   } catch (err) {
     // jwt was tampered with OR an invalid token was typed in OR token is outdated
+    // TODO: handle each case
     return redirect("/");
   }
 };

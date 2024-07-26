@@ -1,8 +1,4 @@
-import {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-  MetaFunction,
-} from "@remix-run/node";
+import { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useRouteError } from "@remix-run/react";
 import { authenticator } from "~/services/auth.server.ts";
 
@@ -22,15 +18,9 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  return await authenticator.isAuthenticated(request, {
-    successRedirect: "/",
-  });
-};
-
 export const action = async ({ request }: ActionFunctionArgs) => {
   return await authenticator.authenticate("form-log-in", request, {
-    successRedirect: "/",
+    successRedirect: "/user",
   });
 };
 

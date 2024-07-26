@@ -1,5 +1,5 @@
 import { json, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Link, useLoaderData, useRouteError } from "@remix-run/react";
+import { useLoaderData, useRouteError } from "@remix-run/react";
 import { singleQuery } from "~/services/db.server";
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -25,11 +25,11 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   if (isNaN(params.contactId as any))
     throw new Error(`Invalid ID: "${params.contactId}"`);
   const contact = await singleQuery(
-    "SELECT id, first_name, last_name, avatar_url, twitter_url, about_me_description, created_at FROM contacts WHERE id = $1",
+    "SELECT id, first_name, last_name, avatar_public_id, twitter_handle, about_me_description, created_at FROM contacts WHERE id = $1",
     [params.contactId as string],
   );
   if (contact === null)
-    throw new Error(`Contact with ID ${params.contactId} not found`);
+    throw new Error(`Contact with ID ${params.contactId} not found!`);
   return json({ contact });
 };
 
@@ -37,11 +37,11 @@ export default function Contact() {
   const { contact } = useLoaderData<typeof loader>();
 
   return (
-    <div className="flex gap-x-6">
-      {contact.avatar_url?.length ? (
+    <div className="flex w-96 gap-x-6">
+      {contact.avatar_public_id?.length ? (
         <img
-          className="h-48 w-48 rounded-2xl border-4 border-sky-500"
-          src={contact.avatar_url}
+          className="h-48 w-48 rounded-2xl border-4 border-sky-300"
+          src={`https://res.cloudinary.com/djpz0iokm/image/upload/q_70/${contact.avatar_public_id}`}
         />
       ) : (
         <div className="font-geist-light flex h-48 w-48 items-center justify-center rounded-2xl bg-slate-300 italic opacity-70">
@@ -58,16 +58,16 @@ export default function Contact() {
             No name
           </h1>
         )}
-        {contact.twitter_url ? (
+        {contact?.twitter_handle ? (
           <a
             className="font-geist-regular text-sky-500 hover:underline"
-            href={contact.twitter_url}
+            href={`https://www.x.com/${contact.twitter_handle}`}
             target="_blank"
           >
-            {contact.twitter_url}
+            @{contact.twitter_handle}
           </a>
         ) : (
-          <a className="font-geist-regular">No twitter</a>
+          <p className="font-geist-regular">No twitter</p>
         )}
         {contact.about_me_description ? (
           <p className="font-geist-regular italic">
@@ -87,16 +87,14 @@ export function ErrorBoundary() {
   const error = useRouteError() as Error;
 
   return (
-    <div>
-      <h1 className="font-geist-black text-7xl text-red-500">Error!..</h1>
-      <strong className="font-geist-light">{error.message}</strong>
-      <br />
-      <Link
-        to="/"
-        className="font-geist-light underline"
-      >
-        Return to the Home Page
-      </Link>
+    <div className="text-center">
+      <h1 className="font-geist-black text-6xl text-sky-500">
+        <span className="text-black">{"<"}</span>Error
+        <span className="text-black">{" />"}</span>
+      </h1>
+      <strong className="font-geist-regular font-normal">
+        {error.message}
+      </strong>
     </div>
   );
 }

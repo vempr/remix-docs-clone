@@ -1,13 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  ActionFunctionArgs,
-  json,
-  LoaderFunctionArgs,
-  MetaFunction,
-} from "@remix-run/node";
+import { ActionFunctionArgs, json, MetaFunction } from "@remix-run/node";
 import { useActionData } from "@remix-run/react";
 import AuthForm from "~/components/AuthForm.tsx";
-import { authenticator } from "~/services/auth.server";
 import { Contact, singleQuery } from "~/services/db.server.ts";
 import hashPassword from "~/utils/hash.ts";
 import { getValidatedFormData } from "remix-hook-form";
@@ -26,12 +20,6 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  return await authenticator.isAuthenticated(request, {
-    successRedirect: "/",
-  });
-};
-
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { errors, data: user } = await getValidatedFormData<RegisterArgs>(
     request,
@@ -45,7 +33,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     `SELECT * FROM contacts WHERE email = '${user.email}'`,
   )) as Contact | null;
   if (existingUser !== null) {
-    return json({ message: "User already exists", ok: false });
+    return json({ message: "User already exists.", ok: false });
   }
 
   const hashedPassword = await hashPassword(user.password);
@@ -60,7 +48,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   sendConfirmationEmail(newUser);
 
   return json({
-    message: "Account created! Please check your inbox to confirm",
+    message: "Account created! Please check your inbox to confirm.",
     ok: true,
   });
 };
